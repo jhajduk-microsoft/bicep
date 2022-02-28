@@ -4,7 +4,7 @@
 import vscode from "vscode";
 import { Command } from "../types";
 
-export class WalkthroughCopyToClipboardCommandParams implements Command {
+export class WalkthroughCopyParamsToClipboardCommandParams implements Command {
   public readonly id = "bicep.gettingStarted.copyToClipboardParams";
 
   public async execute(): Promise<void> {
@@ -16,7 +16,7 @@ export class WalkthroughCopyToClipboardCommandParams implements Command {
   }
 }
 
-export class WalkthroughCopyToClipboardCommandResources implements Command {
+export class WalkthroughCopyResourcesToClipboardCommand implements Command {
   public readonly id = "bicep.gettingStarted.copyToClipboardResources";
 
   //asdfg image shows storage account

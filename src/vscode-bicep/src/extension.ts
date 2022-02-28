@@ -29,8 +29,8 @@ import {
   Disposable,
 } from "./utils";
 import {
-  WalkthroughCopyToClipboardCommandParams,
-  WalkthroughCopyToClipboardCommandResources,
+  WalkthroughCopyParamsToClipboardCommandParams,
+  WalkthroughCopyResourcesToClipboardCommand,
 } from "./commands/gettingStarted/walkthroughCopyToClipboardCommands";
 
 class BicepExtension extends Disposable {
@@ -86,8 +86,8 @@ export async function activate(
         new ShowVisualizerCommand(viewManager),
         new ShowVisualizerToSideCommand(viewManager),
         new ShowSourceCommand(viewManager),
-        new WalkthroughCopyToClipboardCommandParams(),
-        new WalkthroughCopyToClipboardCommandResources(),
+        new WalkthroughCopyParamsToClipboardCommandParams(),
+        new WalkthroughCopyResourcesToClipboardCommand(),
         new WalkthroughCreateBicepFileCommand(),
         new WalkthroughOpenBicepFileCommand(),
         new WalkthroughShowVisualizerCommand()

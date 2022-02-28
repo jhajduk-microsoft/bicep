@@ -349,7 +349,7 @@
           {
             "id": "visualizeYourResources",
             "title": "Visualize your resources",
-            "description": "The Visualizer gives you a representation of the resources in your Bicep file.\n[Open Visualizer to the Side](command:bicep.gettingStarted.openVisualizer)",            
+            "description": "The Visualizer gives you a representation of the resources in your Bicep file.\n[Open Visualizer to the Side](command:bicep.gettingStarted.openVisualizer)",
             "media": {
               "markdown": "media/walkthroughs/gettingStarted/4_Show_Visualizer.md"
             },
