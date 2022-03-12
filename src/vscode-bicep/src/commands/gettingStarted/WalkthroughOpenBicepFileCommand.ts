@@ -87,8 +87,8 @@ async function queryUserForBicepFile(context: IActionContext): Promise<Uri> {
 
 async function browseForFile(context: IActionContext): Promise<Uri> {
   const browsedFile: Uri[] = await context.ui.showOpenDialog({
-    filters: { "Bicep files": ["bicep"] },
     title: "Open a Bicep file",
+    filters: { "Bicep files": ["bicep"] },
   });
 
   return browsedFile[0];

@@ -28,10 +28,7 @@ import {
   activateWithTelemetryAndErrorHandling,
   Disposable,
 } from "./utils";
-import {
-  WalkthroughCopyParamsToClipboardCommandParams,
-  WalkthroughCopyResourcesToClipboardCommand,
-} from "./commands/gettingStarted/walkthroughCopyToClipboardCommands";
+import { WalkthroughCopyParamsToClipboardCommand } from "./commands/gettingStarted/WalkthroughCopyToClipboardCommand";
 
 class BicepExtension extends Disposable {
   private constructor(public readonly extensionUri: vscode.Uri) {
@@ -86,8 +83,7 @@ export async function activate(
         new ShowVisualizerCommand(viewManager),
         new ShowVisualizerToSideCommand(viewManager),
         new ShowSourceCommand(viewManager),
-        new WalkthroughCopyParamsToClipboardCommandParams(),
-        new WalkthroughCopyResourcesToClipboardCommand(),
+        new WalkthroughCopyParamsToClipboardCommand(),
         new WalkthroughCreateBicepFileCommand(),
         new WalkthroughOpenBicepFileCommand(),
         new WalkthroughShowVisualizerCommand()

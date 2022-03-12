@@ -31,7 +31,7 @@ async function findAndActivateVisibleBicepFileEditor(
     title: "Create",
   };
   const response = await context.ui.showWarningMessage(
-    "Please open or create a Bicep file in a visible editor tab to run this command. If necessary, use Ctrl+\\ (Windows) or CMD+\\ (MacOs) to display it to the side.",
+    "You need to open or create a Bicep file in a visible editor tab to run this command. If necessary, use Ctrl+\\ (Windows) or CMD+\\ (MacOs) to display it to the side.",
     open,
     create
   );

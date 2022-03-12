@@ -11,6 +11,7 @@ param appPlanName string
 
 These parameters will be used to fill in attributes in your resources.
 
-[Copy code to clipboard](command:bicep.gettingStarted.copyToClipboardParams)
+<!--- See https://github.com/Microsoft/vscode/issues/69757 for details of how to pass arguments -->
+[Copy code to clipboard](command:bicep.gettingStarted.copyToClipboard?%7B%22step%22%3A%22params%22%7D)
 
 ![Typing parameters into Bicep](2_Type_Params.gif)

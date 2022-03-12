@@ -42,8 +42,7 @@
     "onCommand:bicep.showSource",
     "onCommand:bicep.showVisualizer",
     "onCommand:bicep.showVisualizerToSide",
-    "onCommand:bicep.gettingStarted.copyToClipboardParams",
-    "onCommand:bicep.gettingStarted.copyToClipboardResources",
+    "onCommand:bicep.gettingStarted.copyToClipboard",
     "onCommand:bicep.gettingStarted.createBicepFile",
     "onCommand:bicep.gettingStarted.openBicepFile",
     "onCommand:bicep.gettingStarted.openVisualizer",
@@ -164,12 +163,8 @@
         "title": "Open Visualizer to the Side"
       },
       {
-        "command": "bicep.gettingStarted.copyToClipboardParams",
-        "title": "Copy code to the clipboard"
-      },
-      {
-        "command": "bicep.gettingStarted.copyToClipboardResources",
-        "title": "Copy code to the clipboard"
+        "command": "bicep.gettingStarted.copyToClipboard",
+        "title": "Internal command: Copy walkthrough code to the clipboard"
       }
     ],
     "keybindings": [
@@ -285,11 +280,7 @@
           "when": "never"
         },
         {
-          "command": "bicep.gettingStarted.copyToClipboardParams",
-          "when": "never"
-        },
-        {
-          "command": "bicep.gettingStarted.copyToClipboardResources",
+          "command": "bicep.gettingStarted.copyToClipboard",
           "when": "never"
         }
       ]
@@ -322,8 +313,7 @@
             },
             "completionEvents": [
               "onCommand:bicep.gettingStarted.createBicepFile",
-              "onCommand:bicep.gettingStarted.openBicepFile",
-              "$asdfg:Completion for create not working"
+              "onCommand:bicep.gettingStarted.openBicepFile"
             ]
           },
           {
@@ -333,8 +323,9 @@
             "media": {
               "markdown": "media/walkthroughs/gettingStarted/2_Type_Params.md"
             },
-            "asdfg": "completion events?",
-            "completionEvents": []
+            "completionEvents": [
+              "onCommand:bicep.gettingStarted.copyToClipboard"
+            ]
           },
           {
             "id": "addResources",
@@ -343,8 +334,9 @@
             "media": {
               "markdown": "media/walkthroughs/gettingStarted/3_Type_Resources.md"
             },
-            "asdfg": "completion events?",
-            "completionEvents": []
+            "completionEvents": [
+              "onCommand:bicep.gettingStarted.copyToClipboard"
+            ]
           },
           {
             "id": "visualizeYourResources",
@@ -362,10 +354,10 @@
           {
             "id": "deployToAzure",
             "title": "Deploy to Azure",
-            "description": "It's time to get these resources into Azure. If you don't have the [Azure Account Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.azure-account) installed, you will need it to complete this step.\n[Deploy](command:bicep.deploy)",
+            "description": "It's time to get these resources into Azure. If you don't have the [Azure Account Extension](command:extension.open?%5B%22ms-vscode.azure-account%22%5D) installed, you will need it to complete this step.\n[Deploy](command:bicep.deploy)",
             "media": {
               "image": "media/walkthroughs/gettingStarted/5_Deploy.gif",
-              "altText": "TODO"
+              "altText": "Example of deploying Bicep file to Azure"
             },
             "completionEvents": [
               "onCommand:bicep.deploy"

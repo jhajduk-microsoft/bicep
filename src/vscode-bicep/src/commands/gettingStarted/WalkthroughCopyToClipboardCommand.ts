@@ -1,0 +1,61 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+/* eslint-disable no-self-assign */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import { IActionContext } from "@microsoft/vscode-azext-utils";
+import vscode from "vscode";
+import { Command } from "../types";
+
+const paramsCode =
+  "@description('This is a parameter with a default value')\n" +
+  "param location string = resourceGroup().location\n" +
+  "@description('This is a parameter that must be given a value at deployment time')\n" +
+  "param appPlanName string\n" +
+  "\n";
+
+const resourcesCode = `
+resource appServicePlan 'Microsoft.Web/serverfarms@2020-12-01' = {
+  name: appPlanName
+  location: location
+  sku: {
+    name: 'F1'
+    capacity: 1
+  }
+}
+
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: '\${appServicePlan.name}storage'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+}      
+`;
+
+export class WalkthroughCopyParamsToClipboardCommand implements Command {
+  public readonly id = "bicep.gettingStarted.copyToClipboard";
+
+  public async execute(
+    context: IActionContext,
+    args: { step: "params" | "resources" }
+  ): Promise<void> {
+    const step = args.step;
+    context.telemetry.properties.step = step;
+
+    console.log(
+      encodeURIComponent(JSON.stringify(["ms-vscode.azure-account"]))
+    );
+
+    let code: string;
+    if (step === "params") {
+      code = paramsCode;
+    } else {
+      code = resourcesCode;
+    }
+
+    vscode.env.clipboard.writeText(code);
+  }
+}

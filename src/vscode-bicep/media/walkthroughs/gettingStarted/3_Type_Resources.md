@@ -8,6 +8,7 @@
 
 Feel free to search for other snippets that suit your needs.
 
-[Copy code to clipboard](command:bicep.gettingStarted.copyToClipboardResources)
+<!--- See https://github.com/Microsoft/vscode/issues/69757 for details of how to pass arguments -->
+[Copy code to clipboard](command:bicep.gettingStarted.copyToClipboard?%7B%22step%22%3A%22resources%22%7D)
 
 ![Typing resources into Bicep file](3_Type_Resources.gif)
