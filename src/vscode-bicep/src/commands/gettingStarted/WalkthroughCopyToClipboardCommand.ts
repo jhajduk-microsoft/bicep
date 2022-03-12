@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable no-self-assign */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+//asdfg telemetry
 
 import { IActionContext } from "@microsoft/vscode-azext-utils";
 import vscode from "vscode";
@@ -49,13 +48,7 @@ export class WalkthroughCopyParamsToClipboardCommand implements Command {
       encodeURIComponent(JSON.stringify(["ms-vscode.azure-account"]))
     );
 
-    let code: string;
-    if (step === "params") {
-      code = paramsCode;
-    } else {
-      code = resourcesCode;
-    }
-
+    const code = step === "params" ? paramsCode : resourcesCode;
     vscode.env.clipboard.writeText(code);
   }
 }
