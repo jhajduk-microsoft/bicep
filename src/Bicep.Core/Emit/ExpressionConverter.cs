@@ -4,17 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Azure.Deployments.Core.Extensions;
 using Azure.Deployments.Expression.Expressions;
+using Bicep.Core.DataFlow;
 using Bicep.Core.Extensions;
 using Bicep.Core.Semantics;
 using Bicep.Core.Semantics.Metadata;
 using Bicep.Core.Syntax;
 using Bicep.Core.TypeSystem;
-using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
 
 namespace Bicep.Core.Emit
@@ -508,12 +507,22 @@ namespace Bicep.Core.Emit
 
             if (ancestors.Length > 0)
             {
+                //try
+                //{
+                //    DoTheThing(this.context.SemanticModel, resource, startingAncestorIndex: 0);
+                //}
+                //catch
+                //{
+                //    // eat it
+                //}
+
                 var firstAncestorNameLength = typesAfterProvider.Length - ancestors.Length;
 
                 var parentNames = ancestors.SelectMany((x, i) =>
                 {
-                    var nameExpression = CreateConverterForIndexReplacement(x.Resource.NameSyntax, x.IndexExpression, resource.Symbol.NameSyntax)
-                        .ConvertExpression(x.Resource.NameSyntax);
+                    //var nameExpression = CreateConverterForIndexReplacement(x.Resource.NameSyntax, x.IndexExpression, resource.Symbol.NameSyntax)
+                    //    .ConvertExpression(x.Resource.NameSyntax);
+                    var nameExpression = this.ConvertExpression(DoTheThing(this.context.SemanticModel, resource, i));
 
                     if (i == 0 && firstAncestorNameLength > 1)
                     {
@@ -538,6 +547,63 @@ namespace Bicep.Core.Emit
                 (type, i) => AppendProperties(
                     CreateFunction("split", nameExpression, new JTokenExpression("/")),
                     new JTokenExpression(i)));
+        }
+
+        private static SyntaxBase DoTheThing(SemanticModel semanticModel, DeclaredResourceMetadata resource, int startingAncestorIndex)
+        {
+            var dfa = new DataFlowAnalyzer(semanticModel);
+            var ancestors = semanticModel.ResourceAncestors.GetAncestors(resource);
+
+            SyntaxBase? rewritten = null;
+            for(int i = startingAncestorIndex; i < ancestors.Length; i++)
+            {
+                var ancestor = ancestors[i];
+
+                var newContext = i < ancestors.Length - 1
+                    ? ancestors[i + 1].Resource.Symbol.NameSyntax
+                    : resource.Symbol.NameSyntax;
+
+                var inaccessibleLocals = dfa.GetInaccessibleLocalsAfterSyntaxMove(ancestor.Resource.NameSyntax, newContext);
+
+                // TODO: Deal with loop item vars
+                var indexVariableSymbol = inaccessibleLocals.SingleOrDefault(s => s.LocalKind == LocalKind.ForExpressionIndexVariable);
+
+                // TODO: Make condition more strict (should be similar to the CreateConverter... method)
+                if (indexVariableSymbol is not null && ancestor.IndexExpression is not null)
+                {
+                    var replacer = new LocalVariableReplacer(semanticModel, indexVariableSymbol, ancestor.IndexExpression);
+                    rewritten = replacer.Rewrite(rewritten ?? ancestor.Resource.NameSyntax);
+                }
+            }
+
+            // TODO: is this condition right?
+            return rewritten ?? resource.NameSyntax;
+        }
+
+        private class LocalVariableReplacer : SyntaxRewriteVisitor
+        {
+            private readonly SemanticModel semanticModel;
+            private readonly LocalVariableSymbol symbolToReplace;
+            private readonly SyntaxBase replacementSyntax;
+
+            public LocalVariableReplacer(SemanticModel semanticModel, LocalVariableSymbol symbolToReplace, SyntaxBase replacementSyntax)
+            {
+                this.semanticModel = semanticModel;
+                this.symbolToReplace = symbolToReplace;
+                this.replacementSyntax = replacementSyntax;
+            }
+
+            protected override SyntaxBase ReplaceVariableAccessSyntax(VariableAccessSyntax syntax)
+            {
+                if (this.semanticModel.GetSymbolInfo(syntax) != this.symbolToReplace)
+                {
+                    // not the symbol we need to replace
+                    // leave syntax as-is
+                    return base.ReplaceVariableAccessSyntax(syntax);
+                }
+
+                return this.replacementSyntax;
+            }
         }
 
         public LanguageExpression GetFullyQualifiedResourceName(DeclaredResourceMetadata resource)
