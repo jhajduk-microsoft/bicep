@@ -35,7 +35,6 @@ async function queryAndOpenBicepFile(
 }
 
 async function queryUserForBicepFile(context: IActionContext): Promise<Uri> {
-  //asdfg time limit?
   const foundBicepFiles = (
     await workspace.findFiles("**/*.bicep", undefined)
   ).filter((f) => !!f.fsPath);
